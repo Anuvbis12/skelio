@@ -48,6 +48,8 @@ runs/
 *.onnx
 output_demo/
 *.log
+apps/web/uploads/*
+!apps/web/uploads/.gitkeep
 
 # 5. IDE & OS Metadata
 .idea/

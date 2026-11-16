@@ -201,6 +201,9 @@ class PersonState:
         self.depth_pct     = 0.0
         self.last_seen     = time.time()
         self.exercise_mode = "PUSH-UP"
+        self.status        = "POSISIKAN TUBUH TERLIHAT"
+        self.primary_angle = 0.0
+        self.posture_angle = 0.0
 
 
 # ==============================================================================
@@ -528,6 +531,10 @@ class BiomechanicalPipeline:
                 else:
                     status = "REBAH / PERSIAPAN NAIK"
                     stat_color = (0, 255, 255)
+
+        pstate.status = status
+        pstate.primary_angle = primary_angle
+        pstate.posture_angle = posture_angle
 
         # 4. HUD Card
         hud_w, hud_h = 250, 145
