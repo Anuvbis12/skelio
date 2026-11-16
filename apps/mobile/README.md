@@ -1,37 +1,54 @@
-# 📱 SKELIO Mobile Application (Roadmap & Architecture)
+# 📱 SKELIO Mobile Application (Android & iOS)
 
-Modul ini dipersiapkan untuk pengembangan aplikasi seluler (Android / iOS) berbasis **Edge AI (On-Device Inference)** dari sistem **SKELIO**.
-
----
-
-## 🏗️ 1. Arsitektur Terencana (Planned Architecture)
-
-Untuk penggunaan latihan mandiri (kalistenik di lantai/kamar), pemrosesan dilakukan secara lokal di perangkat tanpa membutuhkan koneksi internet server:
-
-```
-[ Kamera HP (Android / iOS) ]
-        │
-   (On-Device Processing)
-   ├── Model: YOLOv11-Pose (.tflite / ONNX Runtime Mobile)
-   ├── Smoother: One-Euro Filter (Native C++ / Dart)
-   └── Logic: Cosine Law & FSM State Machine
-        │
-[ Tampilan HUD & Audio Coaching ]
-- Suara Umpan Balik: "Pinggul terlalu turun!"
-- Dynamic Depth Bar Vertikal
-- Reps Counter otomatis
-```
+Aplikasi mobile **SKELIO (Real-Time Biomechanical Analytics)** dirancang khusus untuk layar smartphone dengan kontrol sentuh (*touch-first*), tata letak ramah jempol, serta orientasi layar yang fleksibel.
 
 ---
 
-## 🛠️ 2. Rekomendasi Tech Stack
+## 🚀 3 Cara Menjalankan Versi Mobile
 
-- **Cross-Platform:** Flutter / Dart (atau React Native).
-- **Model Engine:** TensorFlow Lite (TFLite FP16) yang dikonversi dari `core/models/best_calisthenics_pose.pt`.
-- **Hardware Acceleration:** NNAPI (Android) / Metal (iOS) untuk inferensi 30+ FPS pada prosesor smartphone modern.
+### Cara 1: Akses Langsung Lewat HP via Jaringan Wi-Fi (Paling Cepat & Instan)
+1. Pastikan HP dan Laptop terhubung ke jaringan **Wi-Fi yang sama**.
+2. Jalankan server di laptop:
+   ```cmd
+   run_skelio_app.bat
+   ```
+3. Di layar HP (Chrome / Safari), buka alamat IP laptop Anda:
+   ```
+   http://192.168.1.31:5000
+   ```
+   *(Ganti dengan IP lokal laptop Anda jika berbeda)*.
 
 ---
 
-## 🚀 3. Status Pengembangan
+### Cara 2: Install sebagai Aplikasi Native PWA (Progressive Web App)
+Aplikasi SKELIO sudah dilengkapi **Web App Manifest** dan **Service Worker**:
+* **Di Android (Google Chrome):** Buka link di atas, klik tombol **"Install App"** di bilah navigasi atau buka menu titik tiga $\rightarrow$ pilih **"Tambahkan ke Layar Utama" / "Install Aplikasi"**.
+* **Di iPhone (Safari):** Buka link di atas, klik ikon **Share** (kotak panah ke atas) $\rightarrow$ pilih **"Add to Home Screen"**.
+* Ikon resmi SKELIO akan langsung muncul di layar utama smartphone Anda dan berjalan sebagai aplikasi layar penuh (*fullscreen standalone*) tanpa bilah peramban!
 
-*Status:* **Pondasi Arsitektur Siap**. Konversi model ke TFLite dan integrasi Flutter dijadwalkan pada roadmap pasca-Seminar Proposal.
+---
+
+### Cara 3: Build Menjadi File Android APK (.apk) via Capacitor
+Modul di folder `apps/mobile/` sudah disiapkan dengan konfigurasi **Capacitor Android**:
+
+1. Buka folder mobile:
+   ```bash
+   cd apps/mobile
+   ```
+2. Pasang dependensi Capacitor (memerlukan Node.js):
+   ```bash
+   npm install
+   npx cap add android
+   ```
+3. Buka proyek di Android Studio untuk build APK:
+   ```bash
+   npx cap open android
+   ```
+
+---
+
+## 🌟 Fitur Khusus Versi Mobile
+1. **Vertical / Portrait Live Stream:** Tampilan video dan HUD yang dioptimalkan untuk rasio layar ponsel 9:16 atau 1:1.
+2. **Right-Edge Depth Gauge Bar:** Indikator kedalaman gerakan visual di pinggir layar yang mudah dilihat saat meletakkan HP di lantai.
+3. **Audio Coaching Speaker HP:** Suara instruksi pelatih AI langsung terdengar jernih dari speaker ponsel (*Web Speech API*).
+4. **Metronom Tempo Sentuh:** Tombol tempo ritme 2-1-1 ramah jempol.

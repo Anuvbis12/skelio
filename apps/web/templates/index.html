@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SKELIO - Real-Time AI Biomechanical Analytics Dashboard</title>
   
+  <!-- PWA & Mobile Meta Tags -->
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="icon" type="image/svg+xml" href="/static/icon.svg">
+  <link rel="apple-touch-icon" href="/static/icon.svg">
+  <meta name="theme-color" content="#06b6d4">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SKELIO">
+  
   <!-- Tailwind CSS & Google Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,6 +154,12 @@
             <option value="custom_upload" id="opt-custom-upload" class="hidden">📁 Video Upload Mandiri</option>
           </select>
         </div>
+
+        <!-- PWA Install App Button (Visible on Mobile / Desktop PWA) -->
+        <button id="btn-install-pwa" onclick="installSKELIOApp()" class="hidden px-3 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-400 text-slate-950 text-xs font-bold transition-all flex items-center gap-1.5 shadow-md shadow-cyan-500/20">
+          <i data-lucide="smartphone" class="w-4 h-4"></i>
+          <span>Install App</span>
+        </button>
 
         <!-- Upload Video Button (Hidden input triggered) -->
         <input type="file" id="video-file-input" accept="video/mp4,video/mov,video/avi,video/mkv,video/webm" class="hidden" onchange="handleFileInput(event)">
@@ -1170,6 +1186,39 @@
 
     setInterval(fetchTelemetry, 100);
     setInterval(fetchHistory, 1500);
+
+    // ==============================================================================
+    // PWA & SERVICE WORKER INSTALLATION (MOBILE & DESKTOP APP)
+    // ==============================================================================
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('btn-install-pwa');
+      if (btn) btn.classList.remove('hidden');
+    });
+
+    function installSKELIOApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            const btn = document.getElementById('btn-install-pwa');
+            if (btn) btn.classList.add('hidden');
+            speakText("Aplikasi SKELIO berhasil diinstal");
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        alert("Untuk menginstal di HP:\n- Di Android (Chrome): Buka menu titik tiga lalu pilih 'Tambahkan ke Layar Utama' / 'Install App'.\n- Di iPhone (Safari): Buka ikon Share lalu pilih 'Add to Home Screen'.");
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/static/service-worker.js').catch(err => console.log('SW reg error:', err));
+      });
+    }
 
     fetchTelemetry();
     fetchHistory();

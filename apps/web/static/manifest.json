@@ -1,0 +1,19 @@
+{
+  "name": "SKELIO - AI Biomechanical Analytics",
+  "short_name": "SKELIO",
+  "description": "Sistem Evaluasi Postur Olahraga dan Hitung Repetisi Real-Time Berbasis AI Pose Estimation (UNESA 2026)",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0f19",
+  "theme_color": "#06b6d4",
+  "icons": [
+    {
+      "src": "/static/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["fitness", "sports", "education"]
+}
